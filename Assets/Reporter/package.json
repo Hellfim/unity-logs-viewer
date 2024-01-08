@@ -1,0 +1,8 @@
+{
+    "name": "com.hellfim.unity-logs-viewer",
+    "displayName": "UnityLogsViewer",
+    "author": { "name": "aliessmael", "url": "https://github.com/Hellfim" },
+    "version": "1.8.0",
+    "unity": "2022.3",
+    "description": "This plugin provides simple logs viewing on the device"
+}
