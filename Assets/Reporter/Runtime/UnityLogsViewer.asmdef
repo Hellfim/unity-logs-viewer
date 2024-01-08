@@ -1,3 +1,16 @@
 {
-	"name": "UnityLogsViewer"
+    "name": "UnityLogsViewer",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "!RELEASE_STORE"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
