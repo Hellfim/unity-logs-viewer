@@ -229,9 +229,6 @@ public class Reporter : MonoBehaviour
 		Graph,
 	}
 
-	//used to check if you have In Game Logs multiple time in different scene
-	//only one should work and other should be deleted
-	static bool created = false;
 	//public delegate void OnLogHandler( string condition, string stack-trace, LogType type );
 	//public event OnLogHandler OnLog ;
 
@@ -349,13 +346,12 @@ public class Reporter : MonoBehaviour
 	public bool Initialized = false;
 	public void Initialize()
 	{
-		if (!created) {
-			try {
-				gameObject.SendMessage("OnPreStart");
-			}
-			catch (System.Exception e) {
-				Debug.LogException(e);
-			}
+		try {
+			gameObject.SendMessage("OnPreStart");
+		}
+		catch (System.Exception e) {
+			Debug.LogException(e);
+		}
 #if UNITY_CHANGE3
 			scenes = new string[ SceneManager.sceneCountInBuildSettings ];
 			currentScene = SceneManager.GetActiveScene().name;
@@ -371,16 +367,6 @@ public class Reporter : MonoBehaviour
 			//Application.logMessageReceived += CaptureLog ;
 			Application.logMessageReceivedThreaded += CaptureLogThread;
 #endif
-			created = true;
-			//addSample();
-		}
-		else {
-			Debug.LogWarning("tow manager is exists delete the second");
-			DestroyImmediate(gameObject, true);
-			return;
-		}
-
-
 		//initialize gui and styles for gui purpose
 
 		clearContent = new GUIContent("", images.clearImage, "Clear logs");
