@@ -19,6 +19,7 @@ using UnityEngine;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 #if UNITY_CHANGE3
 using UnityEngine.SceneManagement;
 #endif
@@ -297,6 +298,8 @@ public class Reporter : MonoBehaviour
 	string maxTextureSize;
 #endif
 	string systemMemorySize;
+	
+	int mainThreadId = -1;
 
 	void Awake()
 	{
@@ -310,6 +313,9 @@ public class Reporter : MonoBehaviour
 
     private void OnDestroy()
     {
+        Application.logMessageReceived -= CaptureLog;
+        Application.logMessageReceivedThreaded -= CaptureLogThread;
+
 #if UNITY_CHANGE3
         SceneManager.sceneLoaded -= _OnLevelWasLoaded;
 #endif
@@ -352,6 +358,8 @@ public class Reporter : MonoBehaviour
 		catch (System.Exception e) {
 			Debug.LogException(e);
 		}
+		
+		mainThreadId = Thread.CurrentThread.ManagedThreadId;
 #if UNITY_CHANGE3
 			scenes = new string[ SceneManager.sceneCountInBuildSettings ];
 			currentScene = SceneManager.GetActiveScene().name;
@@ -364,8 +372,8 @@ public class Reporter : MonoBehaviour
 			Application.RegisterLogCallback (new Application.LogCallback (CaptureLog));
 			Application.RegisterLogCallbackThreaded (new Application.LogCallback (CaptureLogThread));
 #else
-			//Application.logMessageReceived += CaptureLog ;
-			Application.logMessageReceivedThreaded += CaptureLogThread;
+		Application.logMessageReceived += CaptureLog;
+		Application.logMessageReceivedThreaded += CaptureLogThread;
 #endif
 		//initialize gui and styles for gui purpose
 
@@ -2012,6 +2020,11 @@ public class Reporter : MonoBehaviour
 	List<Log> threadedLogs = new List<Log>();
 	void CaptureLogThread(string condition, string stacktrace, LogType type)
 	{
+		if (mainThreadId == Thread.CurrentThread.ManagedThreadId)
+		{
+			return;
+		}
+		
 		Log log = new Log() { condition = condition, stacktrace = stacktrace, logType = (_LogType)type };
 		lock (threadedLogs) {
 			threadedLogs.Add(log);
