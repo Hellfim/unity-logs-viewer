@@ -352,13 +352,6 @@ public class Reporter : MonoBehaviour
 	public bool Initialized = false;
 	public void Initialize()
 	{
-		try {
-			gameObject.SendMessage("OnPreStart");
-		}
-		catch (System.Exception e) {
-			Debug.LogException(e);
-		}
-		
 		mainThreadId = Thread.CurrentThread.ManagedThreadId;
 #if UNITY_CHANGE3
 			scenes = new string[ SceneManager.sceneCountInBuildSettings ];

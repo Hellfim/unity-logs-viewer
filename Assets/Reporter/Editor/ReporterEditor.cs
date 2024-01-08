@@ -15,7 +15,6 @@ public class ReporterEditor : Editor
 		GameObject reporterObj = new GameObject();
 		reporterObj.name = "Reporter";
 		Reporter reporter = reporterObj.AddComponent<Reporter>();
-		reporterObj.AddComponent<ReporterMessageReceiver>();
 		//reporterObj.AddComponent<TestReporter>();
 		
 		// Register root object for undo.
