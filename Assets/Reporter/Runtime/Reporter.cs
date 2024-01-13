@@ -1238,15 +1238,6 @@ namespace UnityLogsViewer
 				show = false;
 				ReporterGUI gui = gameObject.GetComponent<ReporterGUI>();
 				DestroyImmediate(gui);
-
-				try
-				{
-					gameObject.SendMessage("OnHideReporter");
-				}
-				catch (System.Exception e)
-				{
-					Debug.LogException(e);
-				}
 			}
 
 
@@ -1984,16 +1975,6 @@ namespace UnityLogsViewer
 			show = true;
 			currentView = ReportView.Logs;
 			gameObject.AddComponent<ReporterGUI>();
-
-
-			try
-			{
-				gameObject.SendMessage("OnShowReporter");
-			}
-			catch (System.Exception e)
-			{
-				Debug.LogException(e);
-			}
 		}
 
 		void Update()
@@ -2174,15 +2155,6 @@ namespace UnityLogsViewer
 				int totalVisibleCount = (int)(Screen.height * 0.75f / size.y);
 				if (startIndex >= (totalCount - totalVisibleCount))
 					scrollPosition.y += size.y;
-			}
-
-			try
-			{
-				gameObject.SendMessage("OnLog", log);
-			}
-			catch (System.Exception e)
-			{
-				Debug.LogException(e);
 			}
 		}
 
