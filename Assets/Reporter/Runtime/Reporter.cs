@@ -573,7 +573,6 @@ namespace UnityLogsViewer
 		void Start()
 		{
 			logDate = System.DateTime.Now.ToString();
-			StartCoroutine("readInfo");
 		}
 
 		//clear all logs
@@ -2257,51 +2256,7 @@ namespace UnityLogsViewer
 
 			PlayerPrefs.Save();
 		}
-
-		//read build information 
-		IEnumerator readInfo()
-		{
-			string prefFile = "build_info";
-			string url = prefFile;
-
-			if (prefFile.IndexOf("://") == -1)
-			{
-				string streamingAssetsPath = Application.streamingAssetsPath;
-				if (streamingAssetsPath == "")
-					streamingAssetsPath = Application.dataPath + "/StreamingAssets/";
-				url = System.IO.Path.Combine(streamingAssetsPath, prefFile);
-			}
-
-			//if (Application.platform != RuntimePlatform.OSXWebPlayer && Application.platform != RuntimePlatform.WindowsWebPlayer)
-			if (!url.Contains("://"))
-				url = "file://" + url;
-
-
-			// float startTime = Time.realtimeSinceStartup;
-#if UNITY_CHANGE4
-			UnityWebRequest www = UnityWebRequest.Get(url);
-			yield return www.SendWebRequest();
-#else
-		WWW www = new WWW(url);
-		yield return www;
-#endif
-
-			if (!string.IsNullOrEmpty(www.error))
-			{
-				Debug.LogError(www.error);
-			}
-			else
-			{
-#if UNITY_CHANGE4
-				buildDate = www.downloadHandler.text;
-#else
-			buildDate = www.text;
-#endif
-			}
-
-			yield break;
-		}
-
+		
 		private void SaveLogsToDevice()
 		{
 			string filePath = Application.persistentDataPath + "/logs.txt";
